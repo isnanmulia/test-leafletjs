@@ -14,28 +14,44 @@
 </body>
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 <script>
+    var map = L.map('map').setView([-6.208, 106.833], 13);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    function onEachFeature(feature, layer) {
+        // does this feature have a property named popupContent?
+        if (feature.properties && feature.properties.popupContent) {
+            layer.bindPopup(feature.properties.popupContent);
+        }
+    }
     var geojsonFeature = {
         "type": "Feature",
         "properties": {
-            "name": "Coors Field",
-            "amenity": "Baseball Stadium",
-            "popupContent": "This is where the Rockies play!"
+            "name": "Gelora Bung Karno",
+            "amenity": "Stadion",
+            "popupContent": "Lorem ipsum!"
         },
         "geometry": {
             "type": "Point",
-            "coordinates": [-104.99404, 39.75621]
+            "coordinates": [106.802, -6.218]
         }
     };
-    L.geoJSON(geojsonFeature).addTo(map);
+    L.geoJSON(geojsonFeature, { onEachFeature: onEachFeature }).addTo(map);
     
     var myLines = [{
         "type": "LineString",
-        "coordinates": [[-100, 40], [-105, 45], [-110, 55]]
+        "coordinates": [[106.812, -6.219], [106.801, -6.225], [106.799, -6.229]]
     }, {
         "type": "LineString",
-        "coordinates": [[-105, 40], [-110, 45], [-115, 55]]
+        "coordinates": [[106.822, -6.233], [106.833, -6.240], [106.843, -6.243]]
     }];
-    var myLayer = L.geoJSON().addTo(map);
-    myLayer.addData(geojsonFeature);
+    var myStyle = {
+        "color": "navy",
+        "weight": 5,
+        "opacity": 0.65
+    };
+    L.geoJSON(myLines, { style: myStyle }).addTo(map);
 </script>
 </html>
